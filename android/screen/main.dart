@@ -16,12 +16,13 @@ import 'edit_profile.dart';
 import 'login.dart';
 import 'preferences.dart';
 
-
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,22 +32,22 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(),
-        '/dashboard': (context) => DashboardScreen(),
-        '/client': (context) => ClientScreen(),
-        '/register-client': (context) => RegisterClientScreen(),
-        '/check-client': (context) => CheckClientScreen(),
-        '/manager': (context) => ManagerScreen(),
-        '/register-manager': (context) => RegisterManagerScreen(),
-        '/check-manager': (context) => CheckManagerScreen(),
-        '/vehicle': (context) => VehicleScreen(),
-        '/register-vehicle': (context) => RegisterVehicleScreen(),
-        '/check-vehicle': (context) => CheckVehicleScreen(),
-        '/rent': (context) => RentScreen(),
-        '/register-rent': (context) => RegisterRentScreen(),
-        '/check-rent': (context) => CheckRentScreen(),
-        '/edit-profile': (context) => EditProfileScreen(),
-        '/preferences': (context) => PreferencesScreen(),
+        '/': (context) => const LoginScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
+        '/client': (context) => const ClientScreen(),
+        '/register-client': (context) => const RegisterClientScreen(),
+        '/check-client': (context) => const CheckClientScreen(),
+        '/manager': (context) => const ManagerScreen(),
+        '/register-manager': (context) => const RegisterManagerScreen(),
+        '/check-manager': (context) => const CheckManagerScreen(),
+        '/vehicle': (context) => const VehicleScreen(),
+        '/register-vehicle': (context) => const RegisterVehicleScreen(),
+        '/check-vehicle': (context) => const CheckVehicleScreen(),
+        '/rent': (context) => const RentScreen(),
+        '/register-rent': (context) => const RegisterRentScreen(),
+        '/check-rent': (context) => const CheckRentScreen(),
+        '/edit-profile': (context) => const EditProfileScreen(),
+        '/preferences': (context) => const PreferencesScreen(),
       },
     );
   }

@@ -4,13 +4,13 @@ import '../database/database_client.dart';
 class EditClientScreen extends StatefulWidget {
   final Client client;
 
-  EditClientScreen({required this.client});
+  const EditClientScreen({super.key, required this.client});
 
   @override
-  _EditClientScreenState createState() => _EditClientScreenState();
+  EditClientScreenState createState() => EditClientScreenState();
 }
 
-class _EditClientScreenState extends State<EditClientScreen> {
+class EditClientScreenState extends State<EditClientScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cnpjController = TextEditingController();
@@ -64,12 +64,12 @@ class _EditClientScreenState extends State<EditClientScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Erro'),
+        title: const Text('Erro'),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -80,7 +80,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Sucesso'),
+        title: const Text('Sucesso'),
         content: Text(message),
         actions: [
           TextButton(
@@ -88,7 +88,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
               Navigator.of(context).pop();
               Navigator.of(context).pop(true); // Voltar para a tela anterior
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -99,7 +99,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Cliente'),
+        title: const Text('Editar Cliente'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -108,38 +108,38 @@ class _EditClientScreenState extends State<EditClientScreen> {
             children: [
               TextField(
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Nome',
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: _phoneController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Telefone',
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: _cnpjController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'CNPJ',
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 controller: _cityController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Cidade',
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Estado',
                 ),
@@ -156,10 +156,10 @@ class _EditClientScreenState extends State<EditClientScreen> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _updateClient,
-                child: Text('Atualizar'),
+                child: const Text('Atualizar'),
               ),
             ],
           ),

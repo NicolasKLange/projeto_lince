@@ -4,11 +4,13 @@ import 'detail_client.dart';
 import 'edit_client.dart';
 
 class CheckClientScreen extends StatefulWidget {
+  const CheckClientScreen({super.key});
+
   @override
-  _CheckClientScreenState createState() => _CheckClientScreenState();
+  CheckClientScreenState createState() => CheckClientScreenState();
 }
 
-class _CheckClientScreenState extends State<CheckClientScreen> {
+class CheckClientScreenState extends State<CheckClientScreen> {
   late Future<List<Client>> _clients;
 
   @override
@@ -49,17 +51,17 @@ class _CheckClientScreenState extends State<CheckClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Consultar Clientes'),
+        title: const Text('Consultar Clientes'),
       ),
       body: FutureBuilder<List<Client>>(
         future: _clients,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Erro ao carregar clientes'));
+            return const Center(child: Text('Erro ao carregar clientes'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Nenhum cliente cadastrado'));
+            return const Center(child: Text('Nenhum cliente cadastrado'));
           } else {
             final clients = snapshot.data!;
             return ListView.builder(
@@ -67,7 +69,7 @@ class _CheckClientScreenState extends State<CheckClientScreen> {
               itemBuilder: (context, index) {
                 final client = clients[index];
                 return Card(
-                  margin: EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.all(8.0),
                   child: ListTile(
                     title: Text(client.name),
                     subtitle: Text('CNPJ: ${client.cnpj}'),
@@ -75,11 +77,11 @@ class _CheckClientScreenState extends State<CheckClientScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                           onPressed: () => _editClient(client),
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: const Icon(Icons.delete),
                           onPressed: () => _deleteClient(client.id!),
                         ),
                       ],
