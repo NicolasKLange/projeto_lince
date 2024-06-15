@@ -1,16 +1,5 @@
-# projeto_lince
+Desafio de dart e flutter, onde irei elaborar um app para ajudar a empresa de alguel de carros para pessoas jurídicas.
 
-A new Flutter project.
+Link para o Diário de bordo, onde todos os dias irei escrever oque estpu fazendo neste projeto: https://docs.google.com/document/d/1oALINTdy00OufZhMnNyQHYeNSLoSsuJN_yi59SSQe0Q/edit?usp=sharing
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Link para o modelo do meu app, sendo realizado pelo canvas: https://www.canva.com/design/DAGHNjpKh0Q/mxSLWaJiWwdOcgC8XDSFyw/edit?utm_content=DAGHNjpKh0Q&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
