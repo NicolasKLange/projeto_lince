@@ -14,8 +14,6 @@ class EditClientScreenState extends State<EditClientScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cnpjController = TextEditingController();
-  final _cityController = TextEditingController();
-  String? _selectedState;
 
   final List<String> _states = [
     'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
@@ -31,17 +29,14 @@ class EditClientScreenState extends State<EditClientScreen> {
     _nameController.text = widget.client.name;
     _phoneController.text = widget.client.phone;
     _cnpjController.text = widget.client.cnpj;
-    _cityController.text = widget.client.city;
-    _selectedState = widget.client.state;
   }
 
   void _updateClient() async {
     final name = _nameController.text;
     final phone = _phoneController.text;
     final cnpj = _cnpjController.text;
-    final city = _cityController.text;
 
-    if (name.isEmpty || phone.isEmpty || cnpj.isEmpty || city.isEmpty || _selectedState == null) {
+    if (name.isEmpty || phone.isEmpty || cnpj.isEmpty) {
       _showError('Todos os campos são obrigatórios');
       return;
     }
@@ -51,8 +46,6 @@ class EditClientScreenState extends State<EditClientScreen> {
       name: name,
       phone: phone,
       cnpj: cnpj,
-      city: city,
-      state: _selectedState!,
     );
 
     await DatabaseClient().updateClient(updatedClient);
@@ -128,33 +121,6 @@ class EditClientScreenState extends State<EditClientScreen> {
                   border: OutlineInputBorder(),
                   labelText: 'CNPJ',
                 ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _cityController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Cidade',
-                ),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Estado',
-                ),
-                value: _selectedState,
-                items: _states.map((String state) {
-                  return DropdownMenuItem<String>(
-                    value: state,
-                    child: Text(state),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedState = newValue;
-                  });
-                },
               ),
               const SizedBox(height: 20),
               ElevatedButton(

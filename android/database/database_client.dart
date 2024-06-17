@@ -2,15 +2,19 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+
 class Client {
   final int? id;
   final String name;
   final String phone;
   final String cnpj;
-  final String city;
-  final String state;
 
-  Client({this.id, required this.name, required this.phone, required this.cnpj, required this.city, required this.state});
+  Client({
+    this.id,
+    required this.name,
+    required this.phone,
+    required this.cnpj
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -18,8 +22,6 @@ class Client {
       'name': name,
       'phone': phone,
       'cnpj': cnpj,
-      'city': city,
-      'state': state,
     };
   }
 }
@@ -38,13 +40,17 @@ class DatabaseClient {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'client_database.db');
+    var path = join(await getDatabasesPath(), 'client_database.db');
     return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE clients(id INTEGER PRIMARY KEY, name TEXT, phone TEXT, cnpj TEXT, city TEXT, state TEXT)',
+          'CREATE TABLE clients('
+              'id INTEGER PRIMARY KEY, '
+              'name TEXT, '
+              'phone TEXT, '
+              'cnpj TEXT)',
         );
       },
     );
@@ -68,8 +74,6 @@ class DatabaseClient {
         name: maps[i]['name'],
         phone: maps[i]['phone'],
         cnpj: maps[i]['cnpj'],
-        city: maps[i]['city'],
-        state: maps[i]['state'],
       );
     });
   }

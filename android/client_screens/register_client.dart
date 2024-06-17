@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../database/database_client.dart';
+
 
 class RegisterClientScreen extends StatefulWidget {
   const RegisterClientScreen({super.key});
@@ -12,33 +14,25 @@ class RegisterClientScreenState extends State<RegisterClientScreen> {
   final _nameController = TextEditingController();
   final _phoneController = TextEditingController();
   final _cnpjController = TextEditingController();
-  final _cityController = TextEditingController();
-  String? _selectedState;
 
-  final List<String> _states = [
-    'Acre', 'Alagoas', 'Amapá', 'Amazonas',
-    'Bahia', 'Ceará', 'Distrito Federal',
-    'Espírito Santo', 'Goiás', 'Maranhão',
-    'Mato Grosso', 'Mato Grosso do Sul',
-    'Minas Gerais', 'Pará', 'Paraíba', 'Paraná',
-    'Pernambuco', 'Piauí', 'Rio de Janeiro',
-    'Rio Grande do Norte', 'Rio Grande do Sul',
-    'Rondônia', 'Roraima', 'Santa Catarina',
-    'São Paulo', 'Sergipe', 'Tocantins'
-  ];
+  Future<bool> checkCNPJ(String cnpj) async {
+    final response = await http.get(Uri.parse('https://brasilapi.com.br/api/cnpj/v1/$cnpj'));
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   void _registerClient() async {
-    final name  = _nameController.text;
+    final name = _nameController.text;
     final phone = _phoneController.text;
-    final cnpj  = _cnpjController.text;
-    final city  = _cityController.text;
+    final cnpj = _cnpjController.text;
 
     if (name.isEmpty  ||
         phone.isEmpty ||
-        cnpj.isEmpty  ||
-        city.isEmpty  ||
-        _selectedState == null)
-    {
+        cnpj.isEmpty) {
       _showError('Todos os campos são obrigatórios');
       return;
     }
@@ -48,16 +42,19 @@ class RegisterClientScreenState extends State<RegisterClientScreen> {
       return;
     }
 
-    Client newClient = Client(
+    var isValidCNPJ = await checkCNPJ(cnpj);
+    if (!isValidCNPJ) {
+      _showError('CNPJ inválido ou não encontrado');
+      return;
+    }
+
+    var newClient = Client(
       name: name,
       phone: phone,
       cnpj: cnpj,
-      city: city,
-      state: _selectedState!,
     );
 
     await DatabaseClient().insertClient(newClient);
-
     _showSuccess('Cliente cadastrado com sucesso');
   }
 
@@ -131,33 +128,6 @@ class RegisterClientScreenState extends State<RegisterClientScreen> {
                   border: OutlineInputBorder(),
                   labelText: 'CNPJ',
                 ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _cityController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Cidade',
-                ),
-              ),
-              const SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Estado',
-                ),
-                value: _selectedState,
-                items: _states.map((String state) {
-                  return DropdownMenuItem<String>(
-                    value: state,
-                    child: Text(state),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedState = newValue;
-                  });
-                },
               ),
               const SizedBox(height: 20),
               ElevatedButton(

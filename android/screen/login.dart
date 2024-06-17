@@ -28,6 +28,11 @@ class LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    if (cpf.length != 11) {
+      _showError('Número de cpf inválido');
+      return;
+    }
+
     if (password != confirmPassword) {
       _showError('As senhas não coincidem');
       return;
