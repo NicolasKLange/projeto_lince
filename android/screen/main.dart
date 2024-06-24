@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         '/check-manager': (context) => const CheckManagerScreen(),
         '/vehicle': (context) => const VehicleScreen(),
         '/register-vehicle': (context) => const RegisterVehicleScreen(),
-        //'/check-vehicle': (context) => const CheckVehicleScreen(),
+        '/check-vehicle': (context) => const CheckVehicleScreen(),
         '/rent': (context) => const RentScreen(),
         '/register-rent': (context) => const RegisterRentScreen(),
         '/check-rent': (context) => const CheckRentScreen(),
