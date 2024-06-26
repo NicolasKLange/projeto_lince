@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../database/database_vehicle.dart';
 import 'edit_vehicle.dart';
+import 'detail_vehicle.dart';
 
 class CheckVehicleScreen extends StatelessWidget {
   const CheckVehicleScreen({Key? key}) : super(key: key);
@@ -33,10 +34,34 @@ class CheckVehicleScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditVehicleScreen(vehicle: vehicle),
+                        builder: (context) => DetailVehicleScreen(vehicle: vehicle),
                       ),
                     );
                   },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditVehicleScreen(vehicle: vehicle),
+                            ),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () async {
+                          await DatabaseVehicle.instance.delete(vehicle.id!);
+                          // Rebuild the widget to update the list
+                          (context as Element).reassemble();
+                        },
+                      ),
+                    ],
+                  ),
                 );
               },
             );

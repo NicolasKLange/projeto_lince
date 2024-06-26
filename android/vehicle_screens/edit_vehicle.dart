@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../database/database_vehicle.dart';
 
 class EditVehicleScreen extends StatelessWidget {
