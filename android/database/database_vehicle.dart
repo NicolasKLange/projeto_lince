@@ -82,7 +82,12 @@ class DatabaseVehicle {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _upgradeDB);
+    return await openDatabase(
+      path,
+      version: 2,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
   }
 
   Future _createDB(Database db, int version) async {
@@ -97,15 +102,23 @@ CREATE TABLE vehicles (
   licensePlate $textType,
   year $textType,
   rentalCost $textType,
-  photo TEXT // Adicionando a coluna de foto
+  photo TEXT
 )
 ''');
   }
 
   Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await db.execute('ALTER TABLE vehicles ADD COLUMN photo TEXT');
+      final columnExists = await _columnExists(db, 'vehicles', 'photo');
+      if (!columnExists) {
+        await db.execute('ALTER TABLE vehicles ADD COLUMN photo TEXT');
+      }
     }
+  }
+
+  Future<bool> _columnExists(Database db, String tableName, String columnName) async {
+    final columns = await db.rawQuery('PRAGMA table_info($tableName)');
+    return columns.any((column) => column['name'] == columnName);
   }
 
   Future<Vehicle> create(Vehicle vehicle) async {

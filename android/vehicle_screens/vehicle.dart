@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'register_vehicle.dart';
-import 'check_vehicle.dart';
 
 class VehicleScreen extends StatelessWidget {
   const VehicleScreen({super.key});
