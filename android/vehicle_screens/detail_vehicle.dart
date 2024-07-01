@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../database/database_vehicle.dart';
 
@@ -26,6 +27,14 @@ class DetailVehicleScreen extends StatelessWidget {
             Text('Ano de Fabricação: ${vehicle.year}', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 10),
             Text('Custo da Diária de Aluguel: ${vehicle.rentalCost}', style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 10),
+            if (vehicle.photo != null && vehicle.photo!.isNotEmpty)
+              Image.file(
+                File(vehicle.photo!),
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
           ],
         ),
       ),

@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import '../database/database_vehicle.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -101,6 +103,15 @@ class RegisterVehicleScreen extends StatelessWidget {
                         return null;
                       },
                     ),
+                    if (state.imageFile != null)
+                      Image.file(state.imageFile!),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        state.getImage(ImageSource.camera);
+                      },
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Tirar Foto'),
+                    ),
                     ElevatedButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
@@ -110,6 +121,7 @@ class RegisterVehicleScreen extends StatelessWidget {
                             licensePlate: state.controllerPlaca.text,
                             year: state.controllerAnoFabricacao.text,
                             rentalCost: state.controllerCustoDiaria.text,
+                            photo: state.imageFile?.path ?? '',
                           );
                           await DatabaseVehicle.instance.create(vehicle);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -164,11 +176,14 @@ class FIPEPROVIDERR extends ChangeNotifier {
   final _controllerAnoFabricacao = TextEditingController();
   final _controllerCustoDiaria = TextEditingController();
   final _controllerPlaca = TextEditingController();
+  File? _imageFile;
 
   TextEditingController get controllerTipoDoCarro => _controllerTipoDoCarro;
   TextEditingController get controllerAnoFabricacao => _controllerAnoFabricacao;
   TextEditingController get controllerCustoDiaria => _controllerCustoDiaria;
   TextEditingController get controllerPlaca => _controllerPlaca;
+
+  File? get imageFile => _imageFile;
 
   Future<void> Marcas() async {
     if (tipoSelecionado != null) {
@@ -197,6 +212,14 @@ class FIPEPROVIDERR extends ChangeNotifier {
       for (final it in data) {
         modelos.add(MODELOS.fromJson(it));
       }
+      notifyListeners();
+    }
+  }
+
+  Future<void> getImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      _imageFile = File(pickedFile.path);
       notifyListeners();
     }
   }

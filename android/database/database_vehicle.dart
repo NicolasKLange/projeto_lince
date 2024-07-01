@@ -8,6 +8,7 @@ class Vehicle {
   final String licensePlate;
   final String year;
   final String rentalCost;
+  final String? photo; // Novo campo para a imagem
 
   Vehicle({
     this.id,
@@ -16,6 +17,7 @@ class Vehicle {
     required this.licensePlate,
     required this.year,
     required this.rentalCost,
+    this.photo,
   });
 
   Vehicle copyWith({
@@ -25,6 +27,7 @@ class Vehicle {
     String? licensePlate,
     String? year,
     String? rentalCost,
+    String? photo,
   }) {
     return Vehicle(
       id: id ?? this.id,
@@ -33,6 +36,7 @@ class Vehicle {
       licensePlate: licensePlate ?? this.licensePlate,
       year: year ?? this.year,
       rentalCost: rentalCost ?? this.rentalCost,
+      photo: photo ?? this.photo,
     );
   }
 
@@ -44,6 +48,7 @@ class Vehicle {
       'licensePlate': licensePlate,
       'year': year,
       'rentalCost': rentalCost,
+      'photo': photo, // Novo campo no mapa
     };
   }
 
@@ -55,6 +60,7 @@ class Vehicle {
       licensePlate: map['licensePlate'],
       year: map['year'],
       rentalCost: map['rentalCost'],
+      photo: map['photo'], // Novo campo do mapa
     );
   }
 }
@@ -76,7 +82,7 @@ class DatabaseVehicle {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(path, version: 2, onCreate: _createDB, onUpgrade: _upgradeDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -90,9 +96,16 @@ CREATE TABLE vehicles (
   model $textType,
   licensePlate $textType,
   year $textType,
-  rentalCost $textType
+  rentalCost $textType,
+  photo TEXT // Adicionando a coluna de foto
 )
 ''');
+  }
+
+  Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE vehicles ADD COLUMN photo TEXT');
+    }
   }
 
   Future<Vehicle> create(Vehicle vehicle) async {
@@ -107,7 +120,7 @@ CREATE TABLE vehicles (
 
     final maps = await db.query(
       'vehicles',
-      columns: ['id', 'brand', 'model', 'licensePlate', 'year', 'rentalCost'],
+      columns: ['id', 'brand', 'model', 'licensePlate', 'year', 'rentalCost', 'photo'],
       where: 'id = ?',
       whereArgs: [id],
     );
