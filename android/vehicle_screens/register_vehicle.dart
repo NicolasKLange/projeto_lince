@@ -221,6 +221,7 @@ class FIPEPROVIDERR extends ChangeNotifier {
     if (pickedFile != null) {
       _imageFile = File(pickedFile.path);
       notifyListeners();
+
     }
   }
 }

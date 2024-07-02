@@ -32,8 +32,7 @@ class DetailVehicleScreen extends StatelessWidget {
               Image.file(
                 File(vehicle.photo!),
                 height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
+                width: 200,
               ),
           ],
         ),
