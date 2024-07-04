@@ -8,7 +8,7 @@ class Vehicle {
   final String licensePlate;
   final String year;
   final String rentalCost;
-  final String? photo; // Novo campo para a imagem
+  final List<String>? photos; // Alterado para lista de caminhos de imagens
 
   Vehicle({
     this.id,
@@ -17,7 +17,7 @@ class Vehicle {
     required this.licensePlate,
     required this.year,
     required this.rentalCost,
-    this.photo,
+    this.photos,
   });
 
   Vehicle copyWith({
@@ -27,7 +27,7 @@ class Vehicle {
     String? licensePlate,
     String? year,
     String? rentalCost,
-    String? photo,
+    List<String>? photos,
   }) {
     return Vehicle(
       id: id ?? this.id,
@@ -36,7 +36,7 @@ class Vehicle {
       licensePlate: licensePlate ?? this.licensePlate,
       year: year ?? this.year,
       rentalCost: rentalCost ?? this.rentalCost,
-      photo: photo ?? this.photo,
+      photos: photos ?? this.photos,
     );
   }
 
@@ -48,7 +48,7 @@ class Vehicle {
       'licensePlate': licensePlate,
       'year': year,
       'rentalCost': rentalCost,
-      'photo': photo, // Novo campo no mapa
+      'photos': photos != null ? photos!.join(',') : null, // Convertendo lista para string
     };
   }
 
@@ -60,10 +60,11 @@ class Vehicle {
       licensePlate: map['licensePlate'],
       year: map['year'],
       rentalCost: map['rentalCost'],
-      photo: map['photo'], // Novo campo do mapa
+      photos: map['photos'] != null ? (map['photos'] as String).split(',') : null, // Convertendo string para lista
     );
   }
 }
+
 
 class DatabaseVehicle {
   static final DatabaseVehicle instance = DatabaseVehicle._init();
@@ -84,7 +85,7 @@ class DatabaseVehicle {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -102,23 +103,15 @@ CREATE TABLE vehicles (
   licensePlate $textType,
   year $textType,
   rentalCost $textType,
-  photo TEXT
+  photos TEXT
 )
 ''');
   }
 
   Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      final columnExists = await _columnExists(db, 'vehicles', 'photo');
-      if (!columnExists) {
-        await db.execute('ALTER TABLE vehicles ADD COLUMN photo TEXT');
-      }
+    if (oldVersion < 3) {
+      await db.execute('ALTER TABLE vehicles ADD COLUMN photos TEXT');
     }
-  }
-
-  Future<bool> _columnExists(Database db, String tableName, String columnName) async {
-    final columns = await db.rawQuery('PRAGMA table_info($tableName)');
-    return columns.any((column) => column['name'] == columnName);
   }
 
   Future<Vehicle> create(Vehicle vehicle) async {
@@ -133,7 +126,7 @@ CREATE TABLE vehicles (
 
     final maps = await db.query(
       'vehicles',
-      columns: ['id', 'brand', 'model', 'licensePlate', 'year', 'rentalCost', 'photo'],
+      columns: ['id', 'brand', 'model', 'licensePlate', 'year', 'rentalCost', 'photos'],
       where: 'id = ?',
       whereArgs: [id],
     );

@@ -15,26 +15,41 @@ class DetailVehicleScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('Marca: ${vehicle.brand}', style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
-            Text('Modelo: ${vehicle.model}', style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
-            Text('Placa: ${vehicle.licensePlate}', style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
-            Text('Ano de Fabricação: ${vehicle.year}', style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
-            Text('Custo da Diária de Aluguel: ${vehicle.rentalCost}', style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 10),
-            if (vehicle.photo != null && vehicle.photo!.isNotEmpty)
-              Image.file(
-                File(vehicle.photo!),
-                height: 200,
-                width: 200,
-              ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text('Marca: ${vehicle.brand}', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              Text('Modelo: ${vehicle.model}', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              Text('Placa: ${vehicle.licensePlate}', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              Text('Ano de Fabricação: ${vehicle.year}', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              Text('Custo da Diária de Aluguel: ${vehicle.rentalCost}', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 10),
+              if (vehicle.photos != null && vehicle.photos!.isNotEmpty)
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: vehicle.photos!.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.file(
+                          File(vehicle.photos![index]),
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

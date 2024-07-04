@@ -103,14 +103,38 @@ class RegisterVehicleScreen extends StatelessWidget {
                         return null;
                       },
                     ),
-                    if (state.imageFile != null)
-                      Image.file(state.imageFile!),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        state.getImage(ImageSource.camera);
-                      },
-                      icon: const Icon(Icons.camera_alt),
-                      label: const Text('Tirar Foto'),
+                    SizedBox(
+                      height: 200,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.vehicleImages.length + 1,
+                        itemBuilder: (context, index) {
+                          if (index == state.vehicleImages.length) {
+                            return GestureDetector(
+                              onTap: () {
+                                state.getImage(ImageSource.camera);
+                              },
+                              child: Container(
+                                width: 200,
+                                color: Colors.grey[300],
+                                child: const Center(
+                                  child: Icon(Icons.add_a_photo, size: 50),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.file(
+                                state.vehicleImages[index]!,
+                                width: 200,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                        },
+                      ),
                     ),
                     ElevatedButton(
                       onPressed: () async {
@@ -121,7 +145,11 @@ class RegisterVehicleScreen extends StatelessWidget {
                             licensePlate: state.controllerPlaca.text,
                             year: state.controllerAnoFabricacao.text,
                             rentalCost: state.controllerCustoDiaria.text,
-                            photo: state.imageFile?.path ?? '',
+                            photos: state.vehicleImages
+                                .map((file) => file?.path)
+                                .where((path) => path != null)
+                                .cast<String>()
+                                .toList(),
                           );
                           await DatabaseVehicle.instance.create(vehicle);
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -141,6 +169,7 @@ class RegisterVehicleScreen extends StatelessWidget {
     );
   }
 }
+
 
 class MARCAS {
   String id;
@@ -176,14 +205,14 @@ class FIPEPROVIDERR extends ChangeNotifier {
   final _controllerAnoFabricacao = TextEditingController();
   final _controllerCustoDiaria = TextEditingController();
   final _controllerPlaca = TextEditingController();
-  File? _imageFile;
+  List<File?> _vehicleImages = [];
 
   TextEditingController get controllerTipoDoCarro => _controllerTipoDoCarro;
   TextEditingController get controllerAnoFabricacao => _controllerAnoFabricacao;
   TextEditingController get controllerCustoDiaria => _controllerCustoDiaria;
   TextEditingController get controllerPlaca => _controllerPlaca;
 
-  File? get imageFile => _imageFile;
+  List<File?> get vehicleImages => _vehicleImages;
 
   Future<void> Marcas() async {
     if (tipoSelecionado != null) {
@@ -218,10 +247,9 @@ class FIPEPROVIDERR extends ChangeNotifier {
 
   Future<void> getImage(ImageSource source) async {
     final pickedFile = await ImagePicker().pickImage(source: source);
-    if (pickedFile != null) {
-      _imageFile = File(pickedFile.path);
+    if (pickedFile != null && _vehicleImages.length < 6) {
+      _vehicleImages.add(File(pickedFile.path));
       notifyListeners();
-
     }
   }
 }
