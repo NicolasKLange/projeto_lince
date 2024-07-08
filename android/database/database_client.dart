@@ -96,4 +96,23 @@ class DatabaseClient {
       whereArgs: [id],
     );
   }
+  Future<Client?> getClientByCnpj(String cnpj) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'clients',
+      where: 'cnpj = ?',
+      whereArgs: [cnpj],
+    );
+
+    if (maps.isNotEmpty) {
+      return Client(
+        id: maps.first['id'],
+        name: maps.first['name'],
+        phone: maps.first['phone'],
+        cnpj: maps.first['cnpj'],
+      );
+    } else {
+      return null;
+    }
+  }
 }

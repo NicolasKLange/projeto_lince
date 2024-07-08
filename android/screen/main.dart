@@ -15,10 +15,6 @@ import 'dashboard.dart';
 import 'edit_profile.dart';
 import 'login.dart';
 import 'preferences.dart';
-import '../vehicle_screens/imagens.dart';
-import '../vehicle_screens/verify_photos.dart';
-import '../vehicle_screens/vehicle_image.dart';
-
 
 void main() {
   runApp(const MyApp());
@@ -52,9 +48,6 @@ class MyApp extends StatelessWidget {
         '/check-rent': (context) => const CheckRentScreen(),
         '/edit-profile': (context) => const EditProfileScreen(),
         '/preferences': (context) => const PreferencesScreen(),
-        '/imagens': (context) => const ImagensScreen(),
-        '/vehicle-image': (context) => const VehicleImageScreen(),
-        '/verify-photos': (context) => const VerifyPhotosScreen(),
       },
     );
   }
