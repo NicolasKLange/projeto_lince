@@ -12,7 +12,6 @@ import '../vehicle_screens/check_vehicle.dart';
 import '../vehicle_screens/register_vehicle.dart';
 import '../vehicle_screens/vehicle.dart';
 import 'dashboard.dart';
-import 'edit_profile.dart';
 import 'login.dart';
 import 'preferences.dart';
 
@@ -46,7 +45,6 @@ class MyApp extends StatelessWidget {
         '/rent': (context) => const RentScreen(),
         '/register-rent': (context) => const RegisterRentScreen(),
         '/check-rent': (context) => const CheckRentScreen(),
-        '/edit-profile': (context) => const EditProfileScreen(),
         '/preferences': (context) => const PreferencesScreen(),
       },
     );

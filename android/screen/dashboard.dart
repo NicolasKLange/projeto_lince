@@ -16,7 +16,6 @@ class DashboardScreen extends StatelessWidget {
           _buildDashboardButton(context, 'Gerentes', '/manager'),
           _buildDashboardButton(context, 'Veículos', '/vehicle'),
           _buildDashboardButton(context, 'Aluguéis', '/rent'),
-          _buildDashboardButton(context, 'Editar Perfil', '/edit-profile'),
           _buildDashboardButton(context, 'Preferências', '/preferences'),
         ],
       ),

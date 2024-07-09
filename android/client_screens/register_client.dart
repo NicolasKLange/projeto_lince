@@ -37,7 +37,7 @@ class RegisterClientScreenState extends State<RegisterClientScreen> {
       return;
     }
 
-    if (phone.length < 12) {
+    if (phone.length < 11) {
       _showError('Número de telefone inválido');
       return;
     }
