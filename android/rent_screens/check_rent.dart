@@ -1,19 +1,37 @@
 import 'package:flutter/material.dart';
-import '../database/database_client.dart';
-import '../database/database_vehicle.dart';
 import '../database/database_rent.dart';
+import 'detail_rent.dart';
+import 'edit_rent.dart';
 
-class CheckRentScreen extends StatelessWidget {
+class CheckRentScreen extends StatefulWidget {
   const CheckRentScreen({Key? key}) : super(key: key);
 
-  Future<Map<String, dynamic>> _getRentDetails(Rent rent) async {
-    final client = await DatabaseClient().readClient(rent.clientId);
-    final vehicle = await DatabaseVehicle.instance.readVehicle(rent.vehicleId);
-    return {
-      'rent': rent,
-      'client': client,
-      'vehicle': vehicle,
-    };
+  @override
+  _CheckRentScreenState createState() => _CheckRentScreenState();
+}
+
+class _CheckRentScreenState extends State<CheckRentScreen> {
+  List<Rent> _rents = [];
+
+  Future<void> _loadRents() async {
+    final rents = await DatabaseRent.instance.readAllRents();
+    setState(() {
+      _rents = rents;
+    });
+  }
+
+  Future<void> _deleteRent(int id) async {
+    await DatabaseRent.instance.delete(id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Aluguel excluído com sucesso!')),
+    );
+    _loadRents();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRents();
   }
 
   @override
@@ -22,58 +40,43 @@ class CheckRentScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Consultar Aluguéis'),
       ),
-      body: FutureBuilder<List<Rent>>(
-        future: DatabaseRent.instance.readAllRents(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum aluguel realizado'));
-          }
-
-          final rents = snapshot.data!;
-          return ListView.builder(
-            itemCount: rents.length,
-            itemBuilder: (context, index) {
-              return FutureBuilder<Map<String, dynamic>>(
-                future: _getRentDetails(rents[index]),
-                builder: (context, rentDetailsSnapshot) {
-                  if (rentDetailsSnapshot.connectionState == ConnectionState.waiting) {
-                    return const ListTile(
-                      title: Text('Carregando...'),
-                    );
-                  } else if (rentDetailsSnapshot.hasError) {
-                    return ListTile(
-                      title: Text('Erro: ${rentDetailsSnapshot.error}'),
-                    );
-                  } else if (!rentDetailsSnapshot.hasData) {
-                    return const ListTile(
-                      title: Text('Dados não encontrados'),
-                    );
-                  }
-
-                  final details = rentDetailsSnapshot.data!;
-                  final client = details['client'] as Client;
-                  final vehicle = details['vehicle'] as Vehicle;
-                  final rent = details['rent'] as Rent;
-
-                  return ListTile(
-                    title: Text('Cliente: ${client.name}'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Telefone: ${client.phone}'),
-                        Text('CNPJ: ${client.cnpj}'),
-                        Text('Veículo: ${vehicle.brand} ${vehicle.model} (${vehicle.licensePlate})'),
-                        Text('Período: ${rent.startDate} - ${rent.endDate}'),
-                      ],
-                    ),
-                  );
-                },
+      body: ListView.builder(
+        itemCount: _rents.length,
+        itemBuilder: (context, index) {
+          final rent = _rents[index];
+          return ListTile(
+            title: Text('Cliente: ${rent.clientId}, Veículo: ${rent.vehicleId}'),
+            subtitle: Text('Início: ${rent.startDate}, Fim: ${rent.endDate}'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RentDetailScreen(rentId: rent.id!),
+                ),
               );
             },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditRentScreen(rent: rent),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () {
+                    _deleteRent(rent.id!);
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
