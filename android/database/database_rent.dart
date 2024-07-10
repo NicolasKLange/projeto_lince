@@ -1,62 +1,54 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'database_client.dart';
-import 'database_vehicle.dart';
 
 class Rent {
-  final int? rentId;
+  final int? id;
   final int clientId;
   final int vehicleId;
   final String startDate;
   final String endDate;
-  final double totalCost;
 
   Rent({
-    this.rentId,
+    this.id,
     required this.clientId,
     required this.vehicleId,
     required this.startDate,
     required this.endDate,
-    required this.totalCost,
   });
 
   Rent copyWith({
-    int? rentId,
+    int? id,
     int? clientId,
     int? vehicleId,
     String? startDate,
     String? endDate,
-    double? totalCost,
   }) {
     return Rent(
-      rentId: rentId ?? this.rentId,
+      id: id ?? this.id,
       clientId: clientId ?? this.clientId,
       vehicleId: vehicleId ?? this.vehicleId,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      totalCost: totalCost ?? this.totalCost,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'rentId': rentId,
+      'id': id,
       'clientId': clientId,
       'vehicleId': vehicleId,
       'startDate': startDate,
       'endDate': endDate,
-      'totalCost': totalCost,
     };
   }
 
   static Rent fromMap(Map<String, dynamic> map) {
     return Rent(
-      rentId: map['rentId'],
+      id: map['id'],
       clientId: map['clientId'],
       vehicleId: map['vehicleId'],
       startDate: map['startDate'],
       endDate: map['endDate'],
-      totalCost: map['totalCost'],
     );
   }
 }
@@ -86,19 +78,17 @@ class DatabaseRent {
   }
 
   Future _createDB(Database db, int version) async {
-    const rentIdType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+    const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     const intType = 'INTEGER NOT NULL';
     const textType = 'TEXT NOT NULL';
-    const doubleType = 'REAL NOT NULL';
 
     await db.execute('''
 CREATE TABLE rents (
-  rentId $rentIdType,
+  id $idType,
   clientId $intType,
   vehicleId $intType,
   startDate $textType,
-  endDate $textType,
-  totalCost $doubleType
+  endDate $textType
 )
 ''');
   }
@@ -106,24 +96,24 @@ CREATE TABLE rents (
   Future<Rent> create(Rent rent) async {
     final db = await instance.database;
 
-    final rentId = await db.insert('rents', rent.toMap());
-    return rent.copyWith(rentId: rentId);
+    final id = await db.insert('rents', rent.toMap());
+    return rent.copyWith(id: id);
   }
 
-  Future<Rent> readRent(int rentId) async {
+  Future<Rent> readRent(int id) async {
     final db = await instance.database;
 
     final maps = await db.query(
       'rents',
-      columns: ['rentId', 'clientId', 'vehicleId', 'startDate', 'endDate', 'totalCost'],
-      where: 'rentId = ?',
-      whereArgs: [rentId],
+      columns: ['id', 'clientId', 'vehicleId', 'startDate', 'endDate'],
+      where: 'id = ?',
+      whereArgs: [id],
     );
 
     if (maps.isNotEmpty) {
       return Rent.fromMap(maps.first);
     } else {
-      throw Exception('RentId $rentId not found');
+      throw Exception('ID $id not found');
     }
   }
 
@@ -142,18 +132,18 @@ CREATE TABLE rents (
     return db.update(
       'rents',
       rent.toMap(),
-      where: 'rentId = ?',
-      whereArgs: [rent.rentId],
+      where: 'id = ?',
+      whereArgs: [rent.id],
     );
   }
 
-  Future<int> delete(int rentId) async {
+  Future<int> delete(int id) async {
     final db = await instance.database;
 
     return await db.delete(
       'rents',
-      where: 'rentId = ?',
-      whereArgs: [rentId],
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 

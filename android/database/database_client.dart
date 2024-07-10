@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-
 class Client {
   final int? id;
   final String name;
@@ -13,7 +12,7 @@ class Client {
     this.id,
     required this.name,
     required this.phone,
-    required this.cnpj
+    required this.cnpj,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +22,15 @@ class Client {
       'phone': phone,
       'cnpj': cnpj,
     };
+  }
+
+  static Client fromMap(Map<String, dynamic> map) {
+    return Client(
+      id: map['id'],
+      name: map['name'],
+      phone: map['phone'],
+      cnpj: map['cnpj'],
+    );
   }
 }
 
@@ -78,6 +86,23 @@ class DatabaseClient {
     });
   }
 
+  Future<Client> readClient(int id) async {
+    final db = await database;
+
+    final maps = await db.query(
+      'clients',
+      columns: ['id', 'name', 'phone', 'cnpj'],
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return Client.fromMap(maps.first);
+    } else {
+      throw Exception('ID $id not found');
+    }
+  }
+
   Future<void> updateClient(Client client) async {
     final db = await database;
     await db.update(
@@ -96,6 +121,7 @@ class DatabaseClient {
       whereArgs: [id],
     );
   }
+
   Future<Client?> getClientByCnpj(String cnpj) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(

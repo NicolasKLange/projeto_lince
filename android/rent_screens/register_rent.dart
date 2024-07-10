@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../database/database_client.dart';
 import '../database/database_vehicle.dart';
+import '../database/database_rent.dart';
 
 class RegisterRentScreen extends StatefulWidget {
   const RegisterRentScreen({Key? key}) : super(key: key);
@@ -21,19 +22,20 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
   Vehicle? _selectedVehicle;
   List<Vehicle> _availableVehicles = [];
   bool _isCnpjValid = false;
+  Client? _client;
 
   Future<void> _validateCnpj() async {
     final client = await DatabaseClient().getClientByCnpj(_cnpjController.text);
     setState(() {
       _isCnpjValid = client != null;
+      _client = client;
     });
   }
 
   Future<void> _loadAvailableVehicles() async {
     final vehicles = await DatabaseVehicle.instance.readAllVehicles();
-    // Aqui você pode adicionar lógica para filtrar veículos já alugados
     setState(() {
-      _availableVehicles = vehicles; // Filtre veículos disponíveis
+      _availableVehicles = vehicles;
     });
   }
 
@@ -53,6 +55,22 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
           _endDate = pickedDate;
         }
       });
+    }
+  }
+
+  Future<void> _registerRent() async {
+    if (_formKey.currentState!.validate() && _selectedVehicle != null && _startDate != null && _endDate != null) {
+      final rent = Rent(
+        clientId: _client!.id!,
+        vehicleId: _selectedVehicle!.id!,
+        startDate: _startDateController.text,
+        endDate: _endDateController.text,
+      );
+      await DatabaseRent.instance.create(rent);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Aluguel registrado com sucesso!')),
+      );
+      Navigator.of(context).pop();
     }
   }
 
@@ -140,11 +158,7 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
                     ),
                   ],
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate() && _selectedVehicle != null) {
-                        // Salvar aluguel no banco de dados
-                      }
-                    },
+                    onPressed: _registerRent,
                     child: const Text('Registrar Aluguel'),
                   ),
                 ],
