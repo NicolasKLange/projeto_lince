@@ -11,7 +11,7 @@ class DetailVehicleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalhes do Veículo'),
+        title: const Text('Detail Vehicle'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -19,15 +19,20 @@ class DetailVehicleScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('Marca: ${vehicle.brand}', style: TextStyle(fontSize: 18)),
+              Text('Brand: ${vehicle.brand}',
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              Text('Modelo: ${vehicle.model}', style: TextStyle(fontSize: 18)),
+              Text('Model: ${vehicle.model}',
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              Text('Placa: ${vehicle.licensePlate}', style: TextStyle(fontSize: 18)),
+              Text('Plate: ${vehicle.licensePlate}',
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              Text('Ano de Fabricação: ${vehicle.year}', style: TextStyle(fontSize: 18)),
+              Text('Year of manufacture: ${vehicle.year}',
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
-              Text('Custo da Diária de Aluguel: ${vehicle.rentalCost}', style: TextStyle(fontSize: 18)),
+              Text('Daily rent cost: ${vehicle.rentalCost}',
+                  style: const TextStyle(fontSize: 18)),
               const SizedBox(height: 10),
               if (vehicle.photos != null && vehicle.photos!.isNotEmpty)
                 SizedBox(

@@ -31,8 +31,23 @@ class RegisterManagerScreenState extends State<RegisterManagerScreen> {
     final city       = _cityController.text;
     final comission = _comissionController.text;
 
-    if (name.isEmpty || phone.isEmpty || cpf.isEmpty || city.isEmpty || comission.isEmpty || _selectedState == null) {
-      _showError('Todos os campos são obrigatórios');
+    if (name.isEmpty      ||
+        phone.isEmpty     ||
+        cpf.isEmpty       ||
+        city.isEmpty      ||
+        comission.isEmpty ||
+        _selectedState == null) {
+      _showError('All fields are required');
+      return;
+    }
+
+    if (phone.length < 11) {
+      _showError('Invalid phone number');
+      return;
+    }
+
+    if (cpf.length != 11) {
+      _showError('Invalid CPF');
       return;
     }
 
@@ -47,14 +62,14 @@ class RegisterManagerScreenState extends State<RegisterManagerScreen> {
 
     await DatabaseManager().insertManager(newManager);
 
-    _showSuccess('Gerente cadastrado com sucesso');
+    _showSuccess('Manager successfully registered');
   }
 
   void _showError(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Erro'),
+        title: const Text('Error'),
         content: Text(message),
         actions: [
           TextButton(
@@ -70,7 +85,7 @@ class RegisterManagerScreenState extends State<RegisterManagerScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sucesso'),
+        title: const Text('Successfully'),
         content: Text(message),
         actions: [
           TextButton(
@@ -89,7 +104,7 @@ class RegisterManagerScreenState extends State<RegisterManagerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastrar Gerente'),
+        title: const Text('Register manager'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -100,46 +115,32 @@ class RegisterManagerScreenState extends State<RegisterManagerScreen> {
                 controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Nome',
+                  labelText: 'Name',
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _phoneController,
+                maxLength: 13,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Telefone',
+                  labelText: 'Phone number',
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _cpfController,
+                maxLength: 11,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'CPF',
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: _cityController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Cidade',
-                ),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _comissionController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Comissão',
-                ),
-              ),
-              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Estado',
+                  labelText: 'State',
                 ),
                 value: _selectedState,
                 items: _states.map((String state) {
@@ -154,10 +155,26 @@ class RegisterManagerScreenState extends State<RegisterManagerScreen> {
                   });
                 },
               ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _cityController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'City',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _comissionController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Commission',
+                ),
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _registerManager,
-                child: const Text('Cadastrar'),
+                child: const Text('Register'),
               ),
             ],
           ),

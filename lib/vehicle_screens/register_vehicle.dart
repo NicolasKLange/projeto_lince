@@ -7,7 +7,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class RegisterVehicleScreen extends StatelessWidget {
-  const RegisterVehicleScreen({Key? key}) : super(key: key);
+  const RegisterVehicleScreen({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class RegisterVehicleScreen extends StatelessWidget {
       child: Consumer<FIPEPROVIDERR>(builder: (_, state, __) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Registrar Veículo'),
+            title: const Text('Register Vehicle'),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8),
@@ -28,7 +30,7 @@ class RegisterVehicleScreen extends StatelessWidget {
                   children: <Widget>[
                     DropdownButton<String>(
                       value: state.tipoSelecionado,
-                      hint: const Text('Selecione o tipo'),
+                      hint: const Text('Select type'),
                       items: state.tipos
                           .map<DropdownMenuItem<String>>((String tipo) {
                         return DropdownMenuItem<String>(
@@ -43,7 +45,7 @@ class RegisterVehicleScreen extends StatelessWidget {
                     ),
                     DropdownButton<MARCAS>(
                       value: state.marcaSelecionada,
-                      hint: const Text('Selecione a marca'),
+                      hint: const Text('Select brand'),
                       items: state.marcas
                           .map<DropdownMenuItem<MARCAS>>((MARCAS marca) {
                         return DropdownMenuItem<MARCAS>(
@@ -58,7 +60,7 @@ class RegisterVehicleScreen extends StatelessWidget {
                     ),
                     DropdownButton<MODELOS>(
                       value: state.modeloSelecionado,
-                      hint: const Text('Selecione o modelo'),
+                      hint: const Text('Select model'),
                       items: state.modelos
                           .map<DropdownMenuItem<MODELOS>>((MODELOS modelo) {
                         return DropdownMenuItem<MODELOS>(
@@ -73,32 +75,36 @@ class RegisterVehicleScreen extends StatelessWidget {
                     ),
                     TextFormField(
                       controller: state.controllerPlaca,
-                      decoration: const InputDecoration(labelText: 'Placa'),
+                      decoration: const InputDecoration(labelText: 'Plate'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a placa';
+                          return 'Please, insert the plate';
                         }
                         return null;
                       },
                     ),
                     TextFormField(
                       controller: state.controllerAnoFabricacao,
-                      decoration: const InputDecoration(labelText: 'Ano de Fabricação'),
+
+                      decoration: const InputDecoration(
+                          labelText: 'Year of manufacture'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o ano de fabricação';
+                          return 'Please, insert the year of manufacture';
                         }
                         return null;
                       },
                     ),
                     TextFormField(
                       controller: state.controllerCustoDiaria,
-                      decoration: const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                          labelText: 'Daily rent cost'),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o custo da diária de aluguel';
+                          return 'Please, insert the daily rent cost';
                         }
                         return null;
                       },
@@ -128,7 +134,6 @@ class RegisterVehicleScreen extends StatelessWidget {
                               child: Image.file(
                                 state.vehicleImages[index]!,
                                 width: 200,
-                                height: 200,
                                 fit: BoxFit.cover,
                               ),
                             );
@@ -153,11 +158,13 @@ class RegisterVehicleScreen extends StatelessWidget {
                           );
                           await DatabaseVehicle.instance.create(vehicle);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Veículo salvo com sucesso!')),
+                            const SnackBar(
+                                content: Text('Vehicle successfully registered!'),
+                            ),
                           );
                         }
                       },
-                      child: const Text('Salvar'),
+                      child: const Text('Register'),
                     ),
                   ],
                 ),
@@ -169,7 +176,6 @@ class RegisterVehicleScreen extends StatelessWidget {
     );
   }
 }
-
 
 class MARCAS {
   String id;
@@ -208,8 +214,11 @@ class FIPEPROVIDERR extends ChangeNotifier {
   List<File?> _vehicleImages = [];
 
   TextEditingController get controllerTipoDoCarro => _controllerTipoDoCarro;
+
   TextEditingController get controllerAnoFabricacao => _controllerAnoFabricacao;
+
   TextEditingController get controllerCustoDiaria => _controllerCustoDiaria;
+
   TextEditingController get controllerPlaca => _controllerPlaca;
 
   List<File?> get vehicleImages => _vehicleImages;
@@ -219,7 +228,8 @@ class FIPEPROVIDERR extends ChangeNotifier {
       marcaSelecionada = null;
       marcas = [];
       final response = await http.get(
-        Uri.parse('https://fipe.parallelum.com.br/api/v2/$tipoSelecionado/brands'),
+        Uri.parse(
+            'https://fipe.parallelum.com.br/api/v2/$tipoSelecionado/brands'),
       );
       final List<dynamic> data = jsonDecode(response.body);
       for (final it in data) {
@@ -234,7 +244,8 @@ class FIPEPROVIDERR extends ChangeNotifier {
       modeloSelecionado = null;
       modelos = [];
       final response = await http.get(
-        Uri.parse('https://fipe.parallelum.com.br/api/v2/$tipoSelecionado/brands/'
+        Uri.parse(
+            'https://fipe.parallelum.com.br/api/v2/$tipoSelecionado/brands/'
             '${marcaSelecionada!.id}/models'),
       );
       final List<dynamic> data = jsonDecode(response.body);

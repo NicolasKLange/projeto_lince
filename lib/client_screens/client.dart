@@ -7,13 +7,13 @@ class ClientScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clientes'),
+        title: const Text('Client'),
       ),
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildDashboardButton(context, 'Cadastrar Cliente', '/register-client'),
-          _buildDashboardButton(context, 'Consultar Cliente', '/check-client'),
+          _buildDashboardButton(context, 'Register Client', '/register-client'),
+          _buildDashboardButton(context, 'Check Client', '/check-client'),
         ],
       ),
     );

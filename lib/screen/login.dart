@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'dashboard.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -9,32 +11,32 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  final _nameController = TextEditingController();
-  final _cpfController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _nameController            = TextEditingController();
+  final _cpfController             = TextEditingController();
+  final _passwordController        = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   void _login() {
-    final name = _nameController.text;
-    final cpf = _cpfController.text;
-    final password = _passwordController.text;
+    final name            = _nameController.text;
+    final cpf             = _cpfController.text;
+    final password        = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
     if (name.isEmpty     ||
         cpf.isEmpty      ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      _showError('Todos os campos são obrigatórios');
+      _showError('All fields are required');
       return;
     }
 
     if (cpf.length != 11) {
-      _showError('Número de cpf inválido');
+      _showError('Invalid CPF, only numbers');
       return;
     }
 
     if (password != confirmPassword) {
-      _showError('As senhas não coincidem');
+      _showError('Passwords do not match');
       return;
     }
 
@@ -48,7 +50,7 @@ class LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Erro'),
+        title: const Text('Error'),
         content: Text(message),
         actions: [
           TextButton(
@@ -64,7 +66,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tela de Login'),
+        title: Text(AppLocalizations.of(context)?.helloWorld ?? ''),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -74,12 +76,13 @@ class LoginScreenState extends State<LoginScreen> {
               controller: _nameController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Nome',
+                labelText: 'Name',
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _cpfController,
+              maxLength: 11,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'CPF',
@@ -91,7 +94,7 @@ class LoginScreenState extends State<LoginScreen> {
               obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Senha',
+                labelText: 'Password',
               ),
             ),
             const SizedBox(height: 10),
@@ -100,7 +103,7 @@ class LoginScreenState extends State<LoginScreen> {
               obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Confirmar Senha',
+                labelText: 'Confirm Password',
               ),
             ),
             const SizedBox(height: 20),

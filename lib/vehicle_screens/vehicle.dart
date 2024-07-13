@@ -7,13 +7,13 @@ class VehicleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Veículos'),
+        title: const Text('Vehicles'),
       ),
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildDashboardButton(context, 'Cadastrar Veículo', '/register-vehicle'),
-          _buildDashboardButton(context, 'Consultar Veículo', '/check-vehicle'),
+          _buildDashboardButton(context, 'Register Vehicle', '/register-vehicle'),
+          _buildDashboardButton(context, 'Check Vehicle', '/check-vehicle'),
         ],
       ),
     );

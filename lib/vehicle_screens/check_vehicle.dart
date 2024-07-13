@@ -4,13 +4,13 @@ import 'edit_vehicle.dart';
 import 'detail_vehicle.dart';
 
 class CheckVehicleScreen extends StatelessWidget {
-  const CheckVehicleScreen({Key? key}) : super(key: key);
+  const CheckVehicleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Veículos Cadastrados'),
+        title: const Text('Register vehicle'),
       ),
       body: FutureBuilder<List<Vehicle>>(
         future: DatabaseVehicle.instance.readAllVehicles(),
@@ -18,9 +18,9 @@ class CheckVehicleScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum veículo cadastrado'));
+            return const Center(child: Text('No vehicles registered'));
           } else {
             final vehicles = snapshot.data!;
             return ListView.builder(
@@ -29,12 +29,13 @@ class CheckVehicleScreen extends StatelessWidget {
                 final vehicle = vehicles[index];
                 return ListTile(
                   title: Text('${vehicle.brand} ${vehicle.model}'),
-                  subtitle: Text('Placa: ${vehicle.licensePlate}'),
+                  subtitle: Text('Plate: ${vehicle.licensePlate}'),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailVehicleScreen(vehicle: vehicle),
+                        builder: (context) => DetailVehicleScreen
+                          (vehicle: vehicle),
                       ),
                     );
                   },
@@ -42,7 +43,7 @@ class CheckVehicleScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -53,7 +54,7 @@ class CheckVehicleScreen extends StatelessWidget {
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () async {
                           await DatabaseVehicle.instance.delete(vehicle.id!);
                           // Rebuild the widget to update the list

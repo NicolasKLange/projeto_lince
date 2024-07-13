@@ -6,7 +6,7 @@ import '../database/database_vehicle.dart';
 class RentDetailScreen extends StatelessWidget {
   final int rentId;
 
-  const RentDetailScreen({Key? key, required this.rentId}) : super(key: key);
+  const RentDetailScreen({super.key, required this.rentId});
 
   Future<Map<String, dynamic>> _loadRentDetails() async {
     final rent = await DatabaseRent.instance.readRent(rentId);
@@ -24,7 +24,7 @@ class RentDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalhes do Aluguel'),
+        title: const Text('Detail rent'),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _loadRentDetails(),
@@ -32,9 +32,9 @@ class RentDetailScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Erro ao carregar detalhes'));
+            return const Center(child: Text('Error loading details'));
           } else if (!snapshot.hasData) {
-            return const Center(child: Text('Aluguel não encontrado'));
+            return const Center(child: Text('Rent not found'));
           }
 
           final rent = snapshot.data!['rent'] as Rent;
@@ -46,16 +46,28 @@ class RentDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Cliente: ${client.name}', style: const TextStyle(fontSize: 18)),
-                Text('Telefone: ${client.phone}', style: const TextStyle(fontSize: 18)),
-                Text('CNPJ: ${client.cnpj}', style: const TextStyle(fontSize: 18)),
+                Text('Client: ${client.name}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('Phone number: ${client.phone}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('CNPJ: ${client.cnpj}',
+                    style: const TextStyle(fontSize: 18)),
                 const SizedBox(height: 8),
-                Text('Veículo: ${vehicle.brand} ${vehicle.model}', style: const TextStyle(fontSize: 18)),
-                Text('Placa: ${vehicle.licensePlate}', style: const TextStyle(fontSize: 18)),
+                Text('Vehicle: ${vehicle.brand} ${vehicle.model}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('Plate: ${vehicle.licensePlate}',
+                    style: const TextStyle(fontSize: 18)),
                 const SizedBox(height: 8),
-                Text('Data de Início: ${rent.startDate}', style: const TextStyle(fontSize: 18)),
-                Text('Data de Término: ${rent.endDate}', style: const TextStyle(fontSize: 18)),
-                Text('Valor Total: R\$${(DateTime.parse(rent.endDate).difference(DateTime.parse(rent.startDate)).inDays * double.parse(vehicle.rentalCost)).toStringAsFixed(2)}', style: const TextStyle(fontSize: 18)),
+                Text('Start date: ${rent.startDate}',
+                    style: const TextStyle(fontSize: 18)),
+                Text('End Date: ${rent.endDate}',
+                    style: const TextStyle(fontSize: 18)),
+                Text(
+                    'Total rent value: R\$${(DateTime.parse(rent.endDate).
+                    difference(DateTime.parse(rent.startDate)).
+                    inDays * double.parse(vehicle.rentalCost)).
+                    toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 18)),
               ],
             ),
           );

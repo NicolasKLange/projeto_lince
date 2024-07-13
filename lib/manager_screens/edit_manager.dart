@@ -19,11 +19,15 @@ class EditManagerScreenState extends State<EditManagerScreen> {
   String? _selectedState;
 
   final List<String> _states = [
-    'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
-    'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
-    'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
-    'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
-    'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins'
+    'Acre', 'Alagoas', 'Amapá', 'Amazonas',
+    'Bahia', 'Ceará', 'Distrito Federal',
+    'Espírito Santo', 'Goiás', 'Maranhão',
+    'Mato Grosso', 'Mato Grosso do Sul',
+    'Minas Gerais', 'Pará', 'Paraíba', 'Paraná',
+    'Pernambuco', 'Piauí', 'Rio de Janeiro',
+    'Rio Grande do Norte', 'Rio Grande do Sul',
+    'Rondônia', 'Roraima', 'Santa Catarina',
+    'São Paulo', 'Sergipe', 'Tocantins'
   ];
 
   @override
@@ -33,7 +37,7 @@ class EditManagerScreenState extends State<EditManagerScreen> {
     _phoneController.text     = widget.manager.phone;
     _cpfController.text       = widget.manager.cpf;
     _cityController.text      = widget.manager.city;
-    _comissionController.text = widget.manager.city;
+    _comissionController.text = widget.manager.comission;
     _selectedState            = widget.manager.state;
   }
 
@@ -44,31 +48,46 @@ class EditManagerScreenState extends State<EditManagerScreen> {
     final city      = _cityController.text;
     final comission = _comissionController.text;
 
-    if (name.isEmpty || phone.isEmpty || cpf.isEmpty || city.isEmpty || comission.isEmpty || _selectedState == null) {
-      _showError('Todos os campos são obrigatórios');
+    if (name.isEmpty      ||
+        phone.isEmpty     ||
+        cpf.isEmpty       ||
+        city.isEmpty      ||
+        comission.isEmpty ||
+        _selectedState == null) {
+      _showError('All fields are required');
+      return;
+    }
+
+    if (phone.length < 11) {
+      _showError('Invalid phone number');
+      return;
+    }
+
+    if (cpf.length != 11) {
+      _showError('Invalid CPF');
       return;
     }
 
     Manager updatedManager = Manager(
-      id: widget.manager.id,
-      name: name,
-      phone: phone,
-      cpf: cpf,
-      city: city,
+      id:        widget.manager.id,
+      name:      name,
+      phone:     phone,
+      cpf:       cpf,
+      city:      city,
       comission: comission,
-      state: _selectedState!,
+      state:     _selectedState!,
     );
 
     await DatabaseManager().updateManager(updatedManager);
 
-    _showSuccess('Gerente atualizado com sucesso');
+    _showSuccess('Manager update Successfully');
   }
 
   void _showError(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Erro ao atualizar'),
+        title: const Text('Error to update'),
         content: Text(message),
         actions: [
           TextButton(
@@ -84,7 +103,7 @@ class EditManagerScreenState extends State<EditManagerScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sucesso'),
+        title: const Text('Successfully'),
         content: Text(message),
         actions: [
           TextButton(
@@ -103,7 +122,7 @@ class EditManagerScreenState extends State<EditManagerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Gerente'),
+        title: const Text('Edit manager'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -114,38 +133,32 @@ class EditManagerScreenState extends State<EditManagerScreen> {
                 controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Nome',
+                  labelText: 'Name',
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _phoneController,
+                maxLength: 13,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Telefone',
+                  labelText: 'Phone number',
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _cpfController,
+                maxLength: 11,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'CPF',
                 ),
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: _cityController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Cidade',
-                ),
-              ),
-              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Estado',
+                  labelText: 'State',
                 ),
                 value: _selectedState,
                 items: _states.map((String state) {
@@ -162,16 +175,24 @@ class EditManagerScreenState extends State<EditManagerScreen> {
               ),
               const SizedBox(height: 10),
               TextField(
+                controller: _cityController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'City',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
                 controller: _comissionController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Comissão',
+                  labelText: 'Commission',
                 ),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _updateClient,
-                child: const Text('Atualizar'),
+                child: const Text('Update'),
               ),
             ],
           ),

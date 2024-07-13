@@ -51,7 +51,7 @@ class CheckClientScreenState extends State<CheckClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Consultar Clientes'),
+        title: const Text('Check Client'),
       ),
       body: FutureBuilder<List<Client>>(
         future: _clients,
@@ -59,9 +59,9 @@ class CheckClientScreenState extends State<CheckClientScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Erro ao carregar clientes'));
+            return const Center(child: Text('Error loading clients...'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum cliente cadastrado'));
+            return const Center(child: Text('No registered client'));
           } else {
             final clients = snapshot.data!;
             return ListView.builder(

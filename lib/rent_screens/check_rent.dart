@@ -23,7 +23,7 @@ class _CheckRentScreenState extends State<CheckRentScreen> {
   Future<void> _deleteRent(int id) async {
     await DatabaseRent.instance.delete(id);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Aluguel excluído com sucesso!')),
+      const SnackBar(content: Text('Successfully deleted rent!')),
     );
     _loadRents();
   }
@@ -38,15 +38,14 @@ class _CheckRentScreenState extends State<CheckRentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Consultar Aluguéis'),
+        title: const Text('Check rent'),
       ),
       body: ListView.builder(
         itemCount: _rents.length,
         itemBuilder: (context, index) {
           final rent = _rents[index];
           return ListTile(
-            title: Text('Cliente: ${rent.clientId}, Veículo: ${rent.vehicleId}'),
-            subtitle: Text('Início: ${rent.startDate}, Fim: ${rent.endDate}'),
+            title: Text('Client: ${rent.clientId}, Vehicle: ${rent.vehicleId}'),
             onTap: () {
               Navigator.push(
                 context,

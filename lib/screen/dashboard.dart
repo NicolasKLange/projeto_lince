@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
-class RentScreen extends StatelessWidget {
-  const RentScreen({super.key});
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Aluguel'),
+        title: const Text('Dashboard'),
       ),
       body: GridView.count(
         crossAxisCount: 2,
         children: [
-          _buildDashboardButton(context, 'Cadastrar Aluguel', '/register-rent'),
-          _buildDashboardButton(context, 'Consultar Aluguel', '/check-rent'),
+          _buildDashboardButton(context, 'Client', '/client'),
+          _buildDashboardButton(context, 'Manager', '/manager'),
+          _buildDashboardButton(context, 'Vehicle', '/vehicle'),
+          _buildDashboardButton(context, 'Rent', '/rent'),
+          _buildDashboardButton(context, 'Preferences', '/preferences'),
         ],
       ),
     );

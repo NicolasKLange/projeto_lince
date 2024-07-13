@@ -24,7 +24,8 @@ class _EditRentScreenState extends State<EditRentScreen> {
     _endDateController = TextEditingController(text: widget.rent.endDate);
   }
 
-  Future<void> _pickDate(BuildContext context, TextEditingController controller, bool isStartDate) async {
+  Future<void> _pickDate(BuildContext context,
+      TextEditingController controller, bool isStartDate) async {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -46,7 +47,7 @@ class _EditRentScreenState extends State<EditRentScreen> {
       );
       await DatabaseRent.instance.update(updatedRent);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Aluguel atualizado com sucesso!')),
+        const SnackBar(content: Text('Successfully updated rent!')),
       );
       Navigator.of(context).pop();
     }
@@ -56,7 +57,7 @@ class _EditRentScreenState extends State<EditRentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Aluguel'),
+        title: const Text('Edit rent'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -67,31 +68,31 @@ class _EditRentScreenState extends State<EditRentScreen> {
               children: <Widget>[
                 TextFormField(
                   controller: _startDateController,
-                  decoration: const InputDecoration(labelText: 'Data de Início'),
+                  decoration: const InputDecoration(labelText: 'Start date'),
                   readOnly: true,
                   onTap: () => _pickDate(context, _startDateController, true),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a data de início';
+                      return 'Please, insert start date';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: _endDateController,
-                  decoration: const InputDecoration(labelText: 'Data de Término'),
+                  decoration: const InputDecoration(labelText: 'End Date'),
                   readOnly: true,
                   onTap: () => _pickDate(context, _endDateController, false),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a data de término';
+                        return 'Please, insert end date';
                     }
                     return null;
                   },
                 ),
                 ElevatedButton(
                   onPressed: _updateRent,
-                  child: const Text('Atualizar Aluguel'),
+                  child: const Text('Update rent'),
                 ),
               ],
             ),

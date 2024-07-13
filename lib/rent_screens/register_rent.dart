@@ -68,7 +68,7 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
       );
       await DatabaseRent.instance.create(rent);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Aluguel registrado com sucesso!')),
+        const SnackBar(content: Text('Successfully registered rent!')),
       );
       Navigator.of(context).pop();
     }
@@ -84,7 +84,7 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrar Aluguel'),
+        title: const Text('Register rent'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -95,22 +95,22 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
               children: <Widget>[
                 TextFormField(
                   controller: _cnpjController,
-                  decoration: const InputDecoration(labelText: 'CNPJ do Cliente'),
+                  decoration: const InputDecoration(labelText: 'Client CNPJ'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o CNPJ';
+                      return 'Pleas, insert client CNPJ';
                     }
                     return null;
                   },
                 ),
                 ElevatedButton(
                   onPressed: _validateCnpj,
-                  child: const Text('Validar CNPJ'),
+                  child: const Text('Validate CNPJ'),
                 ),
                 if (_isCnpjValid) ...[
                   DropdownButton<Vehicle>(
                     value: _selectedVehicle,
-                    hint: const Text('Selecione o veículo'),
+                    hint: const Text('Select vehicle'),
                     items: _availableVehicles.map<DropdownMenuItem<Vehicle>>((Vehicle vehicle) {
                       return DropdownMenuItem<Vehicle>(
                         value: vehicle,
@@ -125,41 +125,41 @@ class _RegisterRentScreenState extends State<RegisterRentScreen> {
                   ),
                   TextFormField(
                     controller: _startDateController,
-                    decoration: const InputDecoration(labelText: 'Data de Início'),
+                    decoration: const InputDecoration(labelText: 'Start date'),
                     readOnly: true,
                     onTap: () => _pickDate(context, _startDateController, true),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, insira a data de início';
+                        return 'Please, insert start date';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     controller: _endDateController,
-                    decoration: const InputDecoration(labelText: 'Data de Término'),
+                    decoration: const InputDecoration(labelText: 'End Date'),
                     readOnly: true,
                     onTap: () => _pickDate(context, _endDateController, false),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Por favor, insira a data de término';
+                        return 'Please, insert end date';
                       }
                       return null;
                     },
                   ),
                   if (_startDate != null && _endDate != null) ...[
                     Text(
-                      'Dias de aluguel: ${_endDate!.difference(_startDate!).inDays}',
+                      'Rent days: ${_endDate!.difference(_startDate!).inDays}',
                       style: const TextStyle(fontSize: 18),
                     ),
                     Text(
-                      'Valor total: R\$${(_endDate!.difference(_startDate!).inDays * double.parse(_selectedVehicle!.rentalCost)).toStringAsFixed(2)}',
+                      'Total value: R\$${(_endDate!.difference(_startDate!).inDays * double.parse(_selectedVehicle!.rentalCost)).toStringAsFixed(2)}',
                       style: const TextStyle(fontSize: 18),
                     ),
                   ],
                   ElevatedButton(
                     onPressed: _registerRent,
-                    child: const Text('Registrar Aluguel'),
+                    child: const Text('Register rent'),
                   ),
                 ],
               ],

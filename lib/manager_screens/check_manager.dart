@@ -51,7 +51,7 @@ class CheckManagerScreenState extends State<CheckManagerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Consultar Gerentes'),
+        title: const Text('Check manager'),
       ),
       body: FutureBuilder<List<Manager>>(
         future: _managers,
@@ -59,9 +59,9 @@ class CheckManagerScreenState extends State<CheckManagerScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Erro ao carregar gerentes'));
+            return const Center(child: Text('Error loading managers...'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Nenhum gerente cadastrado'));
+            return const Center(child: Text('No registered manager'));
           } else {
             final managers = snapshot.data!;
             return ListView.builder(

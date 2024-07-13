@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../database/database_vehicle.dart';
 
@@ -12,13 +11,15 @@ class EditVehicleScreen extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final brandController = TextEditingController(text: vehicle.brand);
     final modelController = TextEditingController(text: vehicle.model);
-    final licensePlateController = TextEditingController(text: vehicle.licensePlate);
+    final licensePlateController =
+        TextEditingController(text: vehicle.licensePlate);
     final yearController = TextEditingController(text: vehicle.year);
-    final rentalCostController = TextEditingController(text: vehicle.rentalCost);
+    final rentalCostController =
+        TextEditingController(text: vehicle.rentalCost);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Veículo'),
+        title: const Text('Edit Vehicle'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -29,52 +30,55 @@ class EditVehicleScreen extends StatelessWidget {
               children: <Widget>[
                 TextFormField(
                   controller: brandController,
-                  decoration: const InputDecoration(labelText: 'Marca'),
+                  decoration: const InputDecoration(labelText: 'Brand'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a marca';
+                      return 'Please, insert the brand';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: modelController,
-                  decoration: const InputDecoration(labelText: 'Modelo'),
+                  decoration: const InputDecoration(labelText: 'Model'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o modelo';
+                      return 'Please, insert the model';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: licensePlateController,
-                  decoration: const InputDecoration(labelText: 'Placa'),
+                  decoration: const InputDecoration(labelText: 'Plate'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira a placa';
+                      return 'Please, insert the plate';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: yearController,
-                  decoration: const InputDecoration(labelText: 'Ano de Fabricação'),
+                  decoration:
+                      const InputDecoration(labelText: 'Year of manufacture'),
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o ano de fabricação';
+                      return 'Please, insert the year of manufacture';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
                   controller: rentalCostController,
-                  decoration: const InputDecoration(labelText: 'Custo da Diária de Aluguel'),
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  decoration:
+                      const InputDecoration(labelText: 'Daily rental cost'),
+                  keyboardType: const TextInputType.numberWithOptions
+                    (decimal: true),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o custo da diária de aluguel';
+                      return 'Please, insert the daily rent cost';
                     }
                     return null;
                   },
@@ -94,7 +98,7 @@ class EditVehicleScreen extends StatelessWidget {
                       Navigator.pop(context);
                     }
                   },
-                  child: const Text('Salvar'),
+                  child: const Text('Register'),
                 ),
               ],
             ),

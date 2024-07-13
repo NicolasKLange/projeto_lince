@@ -1,63 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../database/database_client.dart';
 
-class EditClientScreen extends StatefulWidget {
-  final Client client;
-
-  const EditClientScreen({super.key, required this.client});
+class RegisterClientScreen extends StatefulWidget {
+  const RegisterClientScreen({super.key});
 
   @override
-  EditClientScreenState createState() => EditClientScreenState();
+  RegisterClientScreenState createState() => RegisterClientScreenState();
 }
 
-class EditClientScreenState extends State<EditClientScreen> {
-  final _nameController = TextEditingController();
+class RegisterClientScreenState extends State<RegisterClientScreen> {
+  final _nameController  = TextEditingController();
   final _phoneController = TextEditingController();
-  final _cnpjController = TextEditingController();
+  final _cnpjController  = TextEditingController();
 
-  final List<String> _states = [
-    'Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal',
-    'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul',
-    'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí',
-    'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia',
-    'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins'
-  ];
+  Future<bool> checkCNPJ(String cnpj) async {
+    final response = await http.get(Uri.parse('https://brasilapi.com.br/api/cnpj/v1/$cnpj'));
 
-  @override
-  void initState() {
-    super.initState();
-    _nameController.text = widget.client.name;
-    _phoneController.text = widget.client.phone;
-    _cnpjController.text = widget.client.cnpj;
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  void _updateClient() async {
-    final name = _nameController.text;
+  void _registerClient() async {
+    final name  = _nameController.text;
     final phone = _phoneController.text;
-    final cnpj = _cnpjController.text;
+    final cnpj  = _cnpjController.text;
 
-    if (name.isEmpty || phone.isEmpty || cnpj.isEmpty) {
-      _showError('Todos os campos são obrigatórios');
+    if (name.isEmpty  ||
+        phone.isEmpty ||
+        cnpj.isEmpty) {
+      _showError('All fields are required');
       return;
     }
 
-    Client updatedClient = Client(
-      id: widget.client.id,
+    if (phone.length < 11) {
+      _showError('Invalid phone number');
+      return;
+    }
+
+    var isValidCNPJ = await checkCNPJ(cnpj);
+    if (!isValidCNPJ) {
+      _showError('CNPJ invalid or not found');
+      return;
+    }
+
+    var newClient = Client(
       name: name,
       phone: phone,
       cnpj: cnpj,
     );
 
-    await DatabaseClient().updateClient(updatedClient);
-
-    _showSuccess('Cliente atualizado com sucesso');
+    await DatabaseClient().insertClient(newClient);
+    _showSuccess('Client successfully registered');
   }
 
   void _showError(String message) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Erro'),
+        title: const Text('Error'),
         content: Text(message),
         actions: [
           TextButton(
@@ -73,13 +77,13 @@ class EditClientScreenState extends State<EditClientScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sucesso'),
+        title: const Text('Successfully'),
         content: Text(message),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pop(true); // Voltar para a tela anterior
+              Navigator.of(context).pop();
             },
             child: const Text('OK'),
           ),
@@ -92,7 +96,7 @@ class EditClientScreenState extends State<EditClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Editar Cliente'),
+        title: const Text('Register Client'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -103,20 +107,22 @@ class EditClientScreenState extends State<EditClientScreen> {
                 controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Nome',
+                  labelText: 'Name',
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _phoneController,
+                maxLength: 13,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'Telefone',
+                  labelText: 'Phone number',
                 ),
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _cnpjController,
+                maxLength: 14,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'CNPJ',
@@ -124,8 +130,8 @@ class EditClientScreenState extends State<EditClientScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _updateClient,
-                child: const Text('Atualizar'),
+                onPressed: _registerClient,
+                child: const Text('Register'),
               ),
             ],
           ),
