@@ -7,24 +7,52 @@ class VehicleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Vehicles'),
+        title: const Text(
+          'Vehicles',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.grey, Colors.white],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
-      body: GridView.count(
-        crossAxisCount: 2,
+      body: Column(
         children: [
-          _buildDashboardButton(context, 'Register Vehicle', Icons.directions_car_outlined, '/register-vehicle'),
-          _buildDashboardButton(context, 'Check Vehicle', Icons.manage_search_rounded, '/check-vehicle'),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset('lib/assets/logoSS.png'),
+          ),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              children: [
+                _buildDashboardButton(context, 'Register Vehicle',
+                    Icons.directions_car_outlined, '/register-vehicle'),
+                _buildDashboardButton(context, 'Check Vehicle',
+                    Icons.manage_search_rounded, '/check-vehicle'),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildDashboardButton(BuildContext context, String title, IconData icon, String route) {
+  Widget _buildDashboardButton(
+      BuildContext context, String title, IconData icon, String route) {
     return Card(
-      color: const Color(0xFF69BBBF),
+      color: const Color(0xFFD7D6D4),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
-        side: const BorderSide(color: Color(0xFF126266), width: 5.0),  // Borda roxa
+        side: const BorderSide(color: Colors.black45, width: 5.0), // Borda
       ),
       child: InkWell(
         onTap: () {
@@ -36,15 +64,15 @@ class VehicleScreen extends StatelessWidget {
             Icon(
               icon,
               size: 50,
-              color: const Color(0xFF033D40),
+              color: Colors.black,
             ),
             const SizedBox(height: 10),
             Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                color: Color(0xFF033D40),
-                fontSize: 20,
+                color: Colors.black,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
