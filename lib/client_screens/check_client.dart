@@ -3,13 +3,16 @@ import '../database/database_client.dart';
 import 'detail_client.dart';
 import 'edit_client.dart';
 
+///Screen class check client
 class CheckClientScreen extends StatefulWidget {
+  ///Screen class check client
   const CheckClientScreen({super.key});
 
   @override
   CheckClientScreenState createState() => CheckClientScreenState();
 }
 
+///Screen class check client
 class CheckClientScreenState extends State<CheckClientScreen> {
   late Future<List<Client>> _clients;
 

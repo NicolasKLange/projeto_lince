@@ -1,3 +1,15 @@
 {
-  "helloWorld": "Olá Mundo!"
+  "helloWorld": "Olá Mundo!",
+  "login": "Entrar",
+  "name": "Nome",
+  "cpf": "Cpf",
+  "password": "Senha",
+  "confirmPassword": "Confirmar senha",
+  "preferences": "Preferências",
+  "selectLanguage": "Selecione a língua",
+  "loginButton": "Entrar",
+  "allFieldsRequired": "Todos os dados são obrigatórios",
+  "invalidCpf": "CPF inválido, apenas números",
+  "passwordsDoNotMatch": "As senhas não coincidem",
+  "load": "Mudar"
 }

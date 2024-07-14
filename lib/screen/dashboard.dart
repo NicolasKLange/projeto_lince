@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+///Dashboard screen class
 class DashboardScreen extends StatelessWidget {
+  ///Dashboard screen class
   const DashboardScreen({super.key});
 
   @override
@@ -16,7 +18,6 @@ class DashboardScreen extends StatelessWidget {
           _buildDashboardButton(context, 'Manager', '/manager'),
           _buildDashboardButton(context, 'Vehicle', '/vehicle'),
           _buildDashboardButton(context, 'Rent', '/rent'),
-          _buildDashboardButton(context, 'Preferences', '/preferences'),
         ],
       ),
     );

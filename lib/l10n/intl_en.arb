@@ -1,3 +1,15 @@
 {
-  "helloWorld": "Hello World!"
+  "helloWorld": "Hello World!",
+  "login": "Login",
+  "name": "Name",
+  "cpf": "Cpf",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "preferences": "Preferences",
+  "selectLanguage": "Select Language",
+  "loginButton": "Login",
+  "allFieldsRequired": "All fields are required",
+  "invalidCpf": "Invalid CPF, only numbers",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "load": "load"
 }

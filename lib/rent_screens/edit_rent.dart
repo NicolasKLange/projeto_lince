@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../database/database_rent.dart';
-import 'register_rent.dart';
+
 import 'package:intl/intl.dart';
 
 class EditRentScreen extends StatefulWidget {

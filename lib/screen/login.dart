@@ -1,48 +1,47 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart'; // Importe suas localizações geradas
 import 'dashboard.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  LoginScreenState createState() => LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class LoginScreenState extends State<LoginScreen> {
-  final _nameController            = TextEditingController();
-  final _cpfController             = TextEditingController();
-  final _passwordController        = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   void _login() {
-    final name            = _nameController.text;
-    final cpf             = _cpfController.text;
-    final password        = _passwordController.text;
+    final name = _nameController.text;
+    final cpf = _cpfController.text;
+    final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
-    if (name.isEmpty     ||
-        cpf.isEmpty      ||
+    if (name.isEmpty ||
+        cpf.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      _showError('All fields are required');
+      _showError(AppLocalizations.of(context)?.allFieldsRequired ?? 'All fields are required');
       return;
     }
 
     if (cpf.length != 11) {
-      _showError('Invalid CPF, only numbers');
+      _showError(AppLocalizations.of(context)?.invalidCpf ?? 'Invalid CPF, only numbers');
       return;
     }
 
     if (password != confirmPassword) {
-      _showError('Passwords do not match');
+      _showError(AppLocalizations.of(context)?.passwordsDoNotMatch ?? 'Passwords do not match');
       return;
     }
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) =>  const DashboardScreen()),
+      MaterialPageRoute(builder: (context) => const DashboardScreen()),
     );
   }
 
@@ -66,7 +65,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.helloWorld ?? ''),
+        title: Text(AppLocalizations.of(context)?.login ?? ''),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -74,42 +73,42 @@ class LoginScreenState extends State<LoginScreen> {
           children: [
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Name',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)?.name ?? '',
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _cpfController,
               maxLength: 11,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'CPF',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)?.cpf ?? '',
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)?.password ?? '',
               ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Confirm Password',
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: AppLocalizations.of(context)?.confirmPassword ?? '',
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: const Text('Login'),
+              child: Text(AppLocalizations.of(context)?.loginButton ?? ''),
             ),
           ],
         ),
